@@ -21,10 +21,13 @@ It allows us to associate "hearing" an event with executing a callback.
 1. the name of the event
 2. a _callback function_ to "handle" the event
 
-Start by adding a listener for `click` event on the `main#main` element
-in `index.html`.  Take a look at `index.html` in the browser. When you
-click in the `main#main` area, nothing happens. Now let's set up
-some _event handling_.
+Take a look at `index.html` in the browser. When you click in the `<input>`
+area, nothing happens. Now let's set up some _event handling_.
+
+Start by adding an event listener for the `click` event on the `input#input`
+element in `index.html`.
+
+Try out the following in the Chrome DevTools console:
 
 ```js
 const main = document.getElementById('main');
@@ -34,168 +37,10 @@ main.addEventListener('click', function(event) {
 });
 ```
 
-### Demonstrate Preventing the Default Behavior for DOM Nodes with `preventDefault()`
+When you click inside of `input#input`, **_now_**, you will get an alert box.
 
-Let's test out preventing the default behavior of the input by keeping it from
-receiving the "g" character.
-
-```js
-const input = document.querySelector('input');
-
-input.addEventListener('keydown', function(e) {
-  if (e.which === 71) {
-    console.log('default prevented')
-    return e.preventDefault()
-  } else {
-    console.log('Not a "g"')
-  }
-})
-```
-
-Now try to type "g" in the input — not working, right?
-
-Every DOM `event` comes with a `preventDefault` property. `preventDefault` is a
-function that, when called, will prevent the, well, default event from taking
-place. It provides us an opportunity to intercept and tweak user interactions
-(usually in more helpful ways than preventing them from typing "g").
-
-Another, related event property is called `stopPropagation`. Like
-`preventDefault`, `stopPropagation` is a function that, when called, interrupts
-the event's normal behavior. In this case, it stops the event from triggering
-other nodes in the DOM that might be listening for the same event. Yes, one
-action can trigger multiple events!
-
-### Explain the Difference Between Bubbling and Capturing Events
-
-In JavaScript, all click events "bubble up" the DOM. The `document` object knows
-about every event that is triggered on a page. When one element is nested inside
-a second element, and both elements have registered a listener for the same
-event (a "click", for example). In most cases, that's not the desired behavior.
-Imagine if you had a large series of nested elements all with click events.
-Firing the click event of the innermost child would trigger the click events of
-every single parent.
-
-DOM events propagate by bubbling (starting at the target node and moving up the
-DOM tree to the root) and capturing (starting from the target node's parent
-elements and propagating down the tree until it reaches the target) — by
-default, events nowadays all bubble. We can verify this behavior by attaching
-listeners to those nested `div`s in `index.html`.
-
-```js
-let divs = document.querySelectorAll('div');
-
-function bubble(e) {
-  // remember all of those fancy DOM node properties?
-  // we're making use of them to get the number
-  // in each div here!
-
-  // if `this` is a bit confusing, don't worry —
-  // for now, know that it refers to the div that
-  // is triggering the current event handler.
-  console.log(this.firstChild.nodeValue.trim() + ' bubbled');
-}
-
-for (let i = 0; i < divs.length; i++) {
-  divs[i].addEventListener('click', bubble);
-}
-```
-
-Now click on the `div` containing "5". You should see
-
-```js
-5 bubbled
-4 bubbled
-3 bubbled
-2 bubbled
-1 bubbled
-```
-
-In the console, you can see the event starts at `div` 5, and then it bubbles up
-to the topmost node. Along the way, it triggers any other nodes that are
-listening for the event — in this case, `'click'`.
-||||||| merged common ancestors
-### Demonstrate Preventing the Default Behavior for DOM Nodes with `preventDefault()`
-
-Let's test out preventing the default behavior of the input by keeping it from
-receiving the "g" character.
-
-```js
-const input = document.querySelector('input');
-
-input.addEventListener('keydown', function(e) {
-  if (e.which === 71) {
-    console.log('default prevented');
-    return e.preventDefault();
-  } else {
-    console.log('Not a "g"');
-  }
-});
-```
-
-Now try to type "g" in the input — not working, right?
-
-Every DOM `event` comes with a `preventDefault` property. `preventDefault` is a
-function that, when called, will prevent the, well, default event from taking
-place. It provides us an opportunity to intercept and tweak user interactions
-(usually in more helpful ways than preventing them from typing "g").
-
-Another, related event property is called `stopPropagation`. Like
-`preventDefault`, `stopPropagation` is a function that, when called, interrupts
-the event's normal behavior. In this case, it stops the event from triggering
-other nodes in the DOM that might be listening for the same event. Yes, one
-action can trigger multiple events!
-
-### Explain the Difference Between Bubbling and Capturing Events
-
-In JavaScript, all click events "bubble up" the DOM. The `document` object knows
-about every event that is triggered on a page. When one element is nested inside
-a second element, and both elements have registered a listener for the same
-event (a "click", for example). In most cases, that's not the desired behavior.
-Imagine if you had a large series of nested elements all with click events.
-Firing the click event of the innermost child would trigger the click events of
-every single parent.
-
-DOM events propagate by bubbling (starting at the target node and moving up the
-DOM tree to the root) and capturing (starting from the target node's parent
-elements and propagating down the tree until it reaches the target) — by
-default, events nowadays all bubble. We can verify this behavior by attaching
-listeners to those nested `div`s in `index.html`.
-
-```js
-let divs = document.querySelectorAll('div');
-
-function bubble(e) {
-  // remember all of those fancy DOM node properties?
-  // we're making use of them to get the number
-  // in each div here!
-
-  // if `this` is a bit confusing, don't worry —
-  // for now, know that it refers to the div that
-  // is triggering the current event handler.
-  console.log(this.firstChild.nodeValue.trim() + ' bubbled');
-}
-
-for (let i = 0; i < divs.length; i++) {
-  divs[i].addEventListener('click', bubble);
-}
-```
-
-Now click on the `div` containing "5". You should see
-
-```js
-5 bubbled
-4 bubbled
-3 bubbled
-2 bubbled
-1 bubbled
-```
-
-In the console, you can see the event starts at `div` 5, and then it bubbles up
-to the topmost node. Along the way, it triggers any other nodes that are
-listening for the event — in this case, `'click'`.
-=======
-When you click inside of `main#main`, **_now_**, you will get an alert box.
->>>>>>> origin/master
+Take this code and paste it into the `index.js` file's `addingEventListener`
+function.
 
 Let's review the parts of this code:
 
